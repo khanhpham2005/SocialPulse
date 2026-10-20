@@ -5,4 +5,8 @@ export { default as Button } from './Button';
 export { default as SearchInput } from './SearchInput';
 export { default as FilterBar, FilterSelect } from './FilterBar';
 export { default as Table } from './Table';
+export { default as Input } from './Input';
+export { default as Checkbox } from './Checkbox';
 export type { Column, TableProps } from './Table';
+export type { InputProps } from './Input';
+export type { CheckboxProps } from './Checkbox';

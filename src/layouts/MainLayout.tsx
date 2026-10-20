@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   TrendingUp,
   FileText,
   BarChart3,
   Bookmark,
   Database,
-  Settings,
   HelpCircle,
   Globe,
   ChevronRight,
   Menu,
   X,
   Shield,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 /* ------------------------------------------------------------------ */
 /*  Navigation data                                                    */
@@ -72,11 +73,25 @@ const SidebarLink: React.FC<NavItem & { onClick?: () => void }> = ({ label, to, 
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const currentPageName = pageNameMap[location.pathname] ?? 'Trang chủ';
 
   const closeSidebar = () => setSidebarOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/dang-nhap', { replace: true });
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'MA';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   /* ---- Sidebar content (shared between mobile overlay & desktop) ---- */
   const sidebarContent = (
@@ -137,21 +152,29 @@ const MainLayout: React.FC = () => {
           </p>
         </div>
 
-        {/* User avatar */}
-        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 text-sm font-bold shrink-0">
-            MA
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">Minh Anh</p>
-            <p className="text-xs text-gray-400 truncate">Tài khoản demo</p>
+        {/* User avatar & Logout button */}
+        <div className="flex items-center justify-between gap-2 rounded-xl bg-gray-50/80 border border-gray-100 p-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold shrink-0">
+              {getInitials(user?.name)}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-gray-900 truncate">
+                {user?.name || 'Minh Anh'}
+              </p>
+              <p className="text-[10px] text-gray-400 truncate">
+                {user?.role || user?.email || 'Tài khoản demo'}
+              </p>
+            </div>
           </div>
           <button
             type="button"
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Cài đặt tài khoản"
+            onClick={handleLogout}
+            className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors shrink-0"
+            title="Đăng xuất"
+            aria-label="Đăng xuất"
           >
-            <Settings className="h-4 w-4" />
+            <LogOut className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -237,6 +260,16 @@ const MainLayout: React.FC = () => {
               aria-label="Trợ giúp"
             >
               <HelpCircle className="h-4 w-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="sm:hidden flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+              title="Đăng xuất"
+              aria-label="Đăng xuất"
+            >
+              <LogOut className="h-4 w-4" />
             </button>
           </div>
         </header>

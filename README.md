@@ -1,20 +1,24 @@
 # SocialPulse Frontend
 
-Ứng dụng web phân tích xu hướng và cộng đồng người dùng trên các nền tảng mạng xã hội (Facebook, Threads, Reddit). Giao diện  tập trung vào trực quan hóa dữ liệu qua biểu đồ, khối tóm tắt tự động và bảng so sánh chi tiết.
+Ứng dụng web phân tích xu hướng và cộng đồng người dùng trên các nền tảng mạng xã hội (Facebook, Threads, Reddit). Giao diện sáng (light mode), màu nhấn chủ đạo là Indigo, tập trung vào trực quan hóa dữ liệu qua biểu đồ, khối tóm tắt tự động và bảng so sánh chi tiết.
 
-> **Lưu ý**: Đây là phiên bản demo frontend. Toàn bộ số liệu hiển thị đang sử dụng mock data cục bộ trong `src/data/`, chưa kết nối API backend.
+> **Lưu ý**: Đây là phiên bản demo frontend. Toàn bộ số liệu hiển thị và phiên xác thực đang sử dụng mock data/localStorage cục bộ, chưa kết nối API backend.
 
 ---
 
 ## 1. Giới thiệu
 
 - **Mục tiêu**: Theo dõi nhịp thảo luận, so sánh quy mô chủ đề, phân tích sắc thái ý kiến và quản lý nguồn dữ liệu công khai từ Facebook, Threads và Reddit.
-- **Phong cách giao diện**: Hiện đại, tối giản, tông màu sáng, tập trung vào tính rõ ràng của biểu đồ và số liệu phân tích.
-- **Hiện trạng**: Hoàn thiện 5 trang giao diện dựa theo thiết kế Figma, chạy hoàn toàn bằng mock data.
+- **Phong cách giao diện**: Hiện đại, tối giản, tông màu sáng, bám sát thiết kế Figma (chuẩn khung rộng 1216px).
+- **Tài khoản demo sẵn có**:
+  - Email: `demo@gmail.com`
+  - Mật khẩu: `123456`
 
 ---
 
 ## 2. Công nghệ sử dụng
+
+Liệt kê chính xác theo khai báo trong `package.json`:
 
 | Thư viện / Công cụ | Phiên bản | Mục đích sử dụng |
 |:---|:---|:---|
@@ -68,21 +72,23 @@ npm run lint
 
 ## 5. Cấu trúc thư mục
 
-Cấu trúc dự án được phân tách theo module sau:
+Cấu trúc dự án được phân tách theo module rõ ràng, gọn gàng:
 
 ```
 frontend/
 ├── public/                 # Tài nguyên tĩnh phục vụ trực tiếp (favicon, icons)
-├── design/                 # Ảnh chụp màn hình 5 trang đối chiếu từ Figma
+├── design/                 # Ảnh chụp màn hình các trang đối chiếu từ Figma
 ├── src/                    # Toàn bộ mã nguồn ứng dụng
 │   ├── assets/             # Hình ảnh, icon nội bộ
 │   ├── components/         # Các component React
-│   │   └── ui/             # Bộ UI component dùng chung (Card, StatCard, Badge, Button, Table...)
-│   ├── data/               # Mock data và TypeScript interface cho từng trang
-│   ├── layouts/            # Layout chung (MainLayout: Sidebar cố định + Header)
-│   ├── pages/              # 5 màn hình chính của ứng dụng
+│   │   ├── auth/           # Route guard bảo vệ phân quyền (ProtectedRoute, GuestRoute)
+│   │   └── ui/             # Bộ UI component dùng chung (Card, StatCard, Badge, Button, Table, Input, Checkbox...)
+│   ├── contexts/           # Quản lý trạng thái toàn cục (AuthContext: login, register, logout, session)
+│   ├── data/               # Mock data, tài khoản mẫu và TypeScript interface
+│   ├── layouts/            # Các khung layout bao bọc trang (MainLayout, AuthLayout)
+│   ├── pages/              # Các màn hình chính của ứng dụng (Login, Register, Dashboard...)
 │   ├── App.css             # Style bổ trợ cấp ứng dụng
-│   ├── App.tsx             # Định tuyến trung tâm (Routes, Navigate)
+│   ├── App.tsx             # Định tuyến trung tâm (Routes, ProtectedRoute)
 │   ├── index.css           # Cấu hình Tailwind v4 @theme, font Inter và custom classes
 │   └── main.tsx            # Điểm khởi chạy React với BrowserRouter
 ├── index.html              # Template HTML gốc
@@ -95,33 +101,42 @@ frontend/
 
 ---
 
-## 6. Danh sách 5 màn hình & Routing
+## 6. Danh sách màn hình & Routing
 
-Tất cả các màn hình đều dùng chung `MainLayout` (sidebar điều hướng bên trái và header phía trên):
-
-| STT | Tên màn hình | Đường dẫn (Route) | File component | Chức năng chính |
+### Nhóm Xác thực (Dùng `AuthLayout`, bảo vệ bằng `GuestRoute`)
+| STT | Tên màn hình | Đường dẫn | File component | Chức năng chính |
 |:---:|:---|:---|:---|:---|
-| 1 | **Tổng quan xu hướng** | `/tong-quan` (hoặc `/`) | `src/pages/TrendOverview.tsx` | 4 chỉ số vĩ mô, biểu đồ nhịp thảo luận tuần, cơ cấu nền tảng, banner xu hướng và bảng xếp hạng chủ đề. |
-| 2 | **Chi tiết chủ đề** | `/chi-tiet-chu-de` | `src/pages/TopicDetail.tsx` | Phân tích sâu chủ đề *AI trong giáo dục*: tóm tắt tự động, sắc thái cảm xúc, 3 góc nhìn chính, bình luận mẫu và dòng thời gian. |
-| 3 | **So sánh chủ đề** | `/so-sanh` | `src/pages/TopicComparison.tsx` | Đối chiếu song song (*AI trong giáo dục* vs *Giao thông xanh*): biểu đồ cột theo nền tảng, biểu đồ đường theo ngày và bảng metric chi tiết. |
-| 4 | **Chủ đề theo dõi** | `/theo-doi` | `src/pages/WatchedTopics.tsx` | Danh sách chủ đề theo dõi/tạm dừng, biểu mẫu thêm chủ đề mới (nhập từ khóa, tick nền tảng, chọn chu kỳ) và lịch sử hoạt động. |
-| 5 | **Quản lý nguồn dữ liệu** | `/nguon-du-lieu` | `src/pages/DataSources.tsx` | Tình trạng kết nối Facebook/Threads/Reddit, danh sách nguồn dữ liệu, nhật ký thu thập, lịch quét và chỉ số lọc nội dung rác. |
+| 1 | **Đăng nhập** | `/dang-nhap` | `src/pages/Login.tsx` | Form đăng nhập (email, mật khẩu, ẩn/hiện mật khẩu, ghi nhớ phiên, nút điền nhanh tài khoản demo). |
+| 2 | **Đăng ký** | `/dang-ky` | `src/pages/Register.tsx` | Form tạo tài khoản mới (họ tên, email, mật khẩu, xác nhận mật khẩu, đồng ý điều khoản) có kiểm tra hợp lệ và tự động đăng nhập. |
+
+### Nhóm Dashboard (Dùng `MainLayout`, bảo vệ bằng `ProtectedRoute`)
+| STT | Tên màn hình | Đường dẫn | File component | Chức năng chính |
+|:---:|:---|:---|:---|:---|
+| 3 | **Tổng quan xu hướng** | `/tong-quan` (hoặc `/`) | `src/pages/TrendOverview.tsx` | 4 chỉ số vĩ mô, biểu đồ nhịp thảo luận tuần, cơ cấu nền tảng, banner xu hướng và bảng xếp hạng chủ đề. |
+| 4 | **Chi tiết chủ đề** | `/chi-tiet-chu-de` | `src/pages/TopicDetail.tsx` | Phân tích sâu chủ đề *AI trong giáo dục*: tóm tắt tự động, sắc thái cảm xúc, 3 góc nhìn chính, bình luận mẫu và dòng thời gian. |
+| 5 | **So sánh chủ đề** | `/so-sanh` | `src/pages/TopicComparison.tsx` | Đối chiếu song song (*AI trong giáo dục* vs *Giao thông xanh*): biểu đồ cột theo nền tảng, biểu đồ đường theo ngày và bảng metric chi tiết. |
+| 6 | **Chủ đề theo dõi** | `/theo-doi` | `src/pages/WatchedTopics.tsx` | Danh sách chủ đề theo dõi/tạm dừng, biểu mẫu thêm chủ đề mới (nhập từ khóa, tick nền tảng, chọn chu kỳ) và lịch sử hoạt động. |
+| 7 | **Quản lý nguồn dữ liệu** | `/nguon-du-lieu` | `src/pages/DataSources.tsx` | Tình trạng kết nối Facebook/Threads/Reddit, danh sách nguồn dữ liệu, nhật ký thu thập, lịch quét và chỉ số lọc nội dung rác. |
 
 ---
 
-## 7. Cách làm việc với Mock Data
+## 7. Cách làm việc với Mock Data & Quản lý người dùng
 
 ### Vị trí file
 Toàn bộ dữ liệu mẫu được đặt tại thư mục `src/data/`:
+- `users.ts`: Danh sách tài khoản demo (`demo@gmail.com` / `123456`) và cấu hình storage keys.
 - `trendOverview.ts`: Số liệu tổng quan, dữ liệu biểu đồ tuần, danh sách chủ đề thịnh hành.
 - `topicDetail.ts`: Số liệu chi tiết một chủ đề, phân bổ sắc thái, bài viết nguồn, timeline.
 - `topicComparison.ts`: Số liệu đối chiếu giữa 2 chủ đề, bảng so sánh chi tiết.
 - `watchedTopics.ts`: Danh sách chủ đề theo dõi, chu kỳ cập nhật, hoạt động gần đây.
 - `dataSources.ts`: Trạng thái các nền tảng, danh sách nguồn, log thu thập, thống kê lọc rác.
 
-### Cách chỉnh sửa dữ liệu
-- Mở file `.ts` tương ứng và cập nhật trực tiếp giá trị trong các mảng hoặc object.
-- Giữ nguyên các TypeScript `interface` đi kèm (hoặc mở rộng có kiểm soát) để tránh phát sinh lỗi ép kiểu khi build.
+### Cơ chế phiên làm việc (Auth & Session)
+- Phiên đăng nhập được quản lý qua `src/contexts/AuthContext.tsx` và lưu vào `localStorage`:
+  - `socialpulse_current_user`: Lưu thông tin người dùng đang đăng nhập.
+  - `socialpulse_users`: Lưu danh sách các tài khoản được đăng ký mới trên trình duyệt.
+  - `socialpulse_remember_email`: Lưu email khi chọn "Ghi nhớ đăng nhập".
+- Khi chưa đăng nhập, nếu truy cập bất kỳ trang nào trong 5 trang dashboard, hệ thống sẽ tự động chuyển hướng về `/dang-nhap`.
 
 ### Hướng dẫn kết nối API thật sau này
 1. **Tạo tầng API Client**: Tạo thư mục `src/services/` hoặc `src/api/` chứa các hàm gọi API (dùng `fetch` hoặc `axios`).
@@ -134,31 +149,27 @@ Toàn bộ dữ liệu mẫu được đặt tại thư mục `src/data/`:
 ## 8. Quy ước Code & Hướng dẫn phát triển
 
 ### Quy ước đặt tên
-- **Component & Layout**: Dùng `PascalCase` cho tên file và tên component (ví dụ: `TrendOverview.tsx`, `MainLayout.tsx`, `StatCard.tsx`).
-- **File dữ liệu & tiện ích**: Dùng `camelCase` (ví dụ: `trendOverview.ts`, `dataSources.ts`).
-- **Thư mục**: Dùng chữ thường `kebab-case` hoặc `camelCase` ngắn gọn (ví dụ: `src/components/ui/`, `src/layouts/`).
+- **Component & Layout**: Dùng `PascalCase` cho tên file và tên component (ví dụ: `TrendOverview.tsx`, `MainLayout.tsx`, `AuthLayout.tsx`, `Input.tsx`).
+- **File dữ liệu & tiện ích**: Dùng `camelCase` (ví dụ: `users.ts`, `trendOverview.ts`, `dataSources.ts`).
+- **Thư mục**: Dùng chữ thường `kebab-case` hoặc `camelCase` ngắn gọn (ví dụ: `src/components/ui/`, `src/contexts/`, `src/layouts/`).
 
 ### Nơi đặt component dùng chung
-- Toàn bộ component UI nguyên tử tái sử dụng nhiều nơi (Card, StatCard, Badge, Button, Table, SearchInput, FilterBar) nằm trong `src/components/ui/`.
+- Toàn bộ component UI nguyên tử tái sử dụng nhiều nơi (Card, StatCard, Badge, Button, Table, SearchInput, FilterBar, Input, Checkbox) nằm trong `src/components/ui/`.
 - Khi bổ sung component mới, export tập trung tại `src/components/ui/index.ts` để các trang khác import thuận tiện.
-- Khung layout chung (Sidebar, Header, Breadcrumbs) nằm tại `src/layouts/MainLayout.tsx`.
+- Layout dashboard đặt tại `src/layouts/MainLayout.tsx`, layout xác thực đặt tại `src/layouts/AuthLayout.tsx`.
 
 ### Quy ước Tailwind CSS & Design Tokens
 Dự án sử dụng **Tailwind CSS v4** với các thông số thiết kế được khai báo tại `src/index.css`:
 
-- **Khung giao diện (Layout)**: Độ rộng nội dung tối ưu theo thiết kế Figma là `max-w-[1216px]` căn giữa (`mx-auto`).
+- **Khung giao diện (Layout)**: Độ rộng nội dung tối ưu theo thiết kế Figma là `max-w-[1216px]` căn giữa (`mx-auto`). Card xác thực tối ưu `max-w-[460px]`.
 - **Màu nhấn chủ đạo (Primary - Indigo)**:
   - Khai báo token CSS: `--color-primary-50` đến `--color-primary-950`.
   - Class sử dụng chính: `bg-indigo-600` (`#4f46e5`) cho nút bấm/accent, `bg-indigo-50` (`#eef2ff`) cho nền active/highlight, `text-indigo-600` cho liên kết.
 - **Màu trạng thái (Status Colors)**:
-  - Hoạt động / Tăng trưởng: Xanh lá (`emerald-50`, `emerald-600`, `emerald-700`).
+  - Hoạt động / Tăng trưởng / Thành công: Xanh lá (`emerald-50`, `emerald-600`, `emerald-700`).
   - Tạm dừng / Cảnh báo: Vàng cam (`amber-50`, `amber-600`, `amber-700`).
   - Lỗi / Tiêu cực: Đỏ hồng (`rose-50`, `rose-600`, `rose-700`).
-- **Màu thương hiệu mạng xã hội**:
-  - Facebook: Xanh dương `bg-blue-600` (`#2563eb`).
-  - Threads: Đen xám `bg-slate-900` (`#1e293b`).
-  - Reddit: Cam `bg-orange-500` (`#ea580c`).
 - **Font chữ (Typography)**:
   - Font chữ mặc định: **Inter** (`font-sans`), áp dụng thông qua biến `--font-sans`.
   - Tiêu đề trang: `text-2xl` hoặc `text-3xl`, `font-bold`, `tracking-tight`.
-  - Tiêu đề mục phụ / breadcrumb: `text-xs`, `font-semibold`, `uppercase`, `tracking-wider`.
+
