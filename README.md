@@ -1,15 +1,14 @@
 # SocialPulse Frontend
 
-Ứng dụng web phân tích xu hướng và cộng đồng người dùng trên các nền tảng mạng xã hội (Facebook, Threads, Reddit). Giao diện sáng (light mode), màu nhấn chủ đạo là Indigo, tập trung vào trực quan hóa dữ liệu qua biểu đồ, khối tóm tắt tự động và bảng so sánh chi tiết.
+Ứng dụng web phân tích xu hướng và cộng đồng người dùng trên các nền tảng mạng xã hội (Facebook, Threads, Reddit). Giao diện tập trung vào trực quan hóa dữ liệu qua biểu đồ, khối tóm tắt tự động và bảng so sánh chi tiết.
 
-> **Lưu ý**: Đây là phiên bản demo frontend. Toàn bộ số liệu hiển thị và phiên xác thực đang sử dụng mock data/localStorage cục bộ, chưa kết nối API backend.
 
 ---
 
 ## 1. Giới thiệu
 
 - **Mục tiêu**: Theo dõi nhịp thảo luận, so sánh quy mô chủ đề, phân tích sắc thái ý kiến và quản lý nguồn dữ liệu công khai từ Facebook, Threads và Reddit.
-- **Phong cách giao diện**: Hiện đại, tối giản, tông màu sáng, bám sát thiết kế Figma (chuẩn khung rộng 1216px).
+- **Phong cách giao diện**: Hiện đại, tối giản, tông màu sáng, bám sát thiết kế Figma.
 - **Tài khoản demo sẵn có**:
   - Email: `demo@gmail.com`
   - Mật khẩu: `123456`
@@ -18,8 +17,6 @@
 
 ## 2. Công nghệ sử dụng
 
-Liệt kê chính xác theo khai báo trong `package.json`:
-
 | Thư viện / Công cụ | Phiên bản | Mục đích sử dụng |
 |:---|:---|:---|
 | **react** | `^19.3.1` | Thư viện xây dựng giao diện người dùng |
@@ -27,12 +24,11 @@ Liệt kê chính xác theo khai báo trong `package.json`:
 | **react-router-dom** | `^7.18.4` | Quản lý định tuyến và điều hướng SPA |
 | **recharts** | `^3.10.1` | Trực quan hóa dữ liệu qua biểu đồ (Area, Bar, Line, Pie) |
 | **lucide-react** | `^1.59.0` | Bộ icon vector đồng bộ cho toàn bộ giao diện |
-| **vite** | `^8.3.4` | Build tool và development server tốc độ cao |
-| **tailwindcss** | `^4.3.3` | Framework CSS tiện ích phiên bản 4 (cấu hình `@theme`) |
+| **vite** | `^8.3.4` | Build tool và development server tốc độ cao (cấu hình vendor chunking & code splitting) |
+| **tailwindcss** | `^4.3.3` | Framework CSS tiện ích phiên bản 4 (cấu hình CSS-first `@theme`) |
 | **@tailwindcss/postcss** | `^4.3.3` | Plugin PostCSS tích hợp Tailwind CSS v4 |
-| **autoprefixer** | `^10.6.1` | Tự động thêm vendor prefix cho CSS |
-| **typescript** | `~7.0.2` | Ngôn ngữ tĩnh kiểm tra kiểu dữ liệu |
-| **oxlint** | `^1.88.0` | Công cụ phân tích cú pháp và linter |
+| **typescript** | `~7.0.2` | Ngôn ngữ tĩnh kiểm tra kiểu dữ liệu với chế độ `strict` |
+| **oxlint** | `^1.88.0` | Công cụ phân tích cú pháp và linter siêu tốc |
 
 ---
 
@@ -72,31 +68,41 @@ npm run lint
 
 ## 5. Cấu trúc thư mục
 
-Cấu trúc dự án được phân tách theo module rõ ràng, gọn gàng:
+Cấu trúc dự án được phân tách theo module rõ ràng, gọn gàng và không chứa mã rác:
 
 ```
 frontend/
-├── public/                 # Tài nguyên tĩnh phục vụ trực tiếp (favicon, icons)
-├── design/                 # Ảnh chụp màn hình các trang đối chiếu từ Figma
+├── public/                 # Tài nguyên tĩnh phục vụ trực tiếp (favicon.svg)
 ├── src/                    # Toàn bộ mã nguồn ứng dụng
-│   ├── assets/             # Hình ảnh, icon nội bộ
 │   ├── components/         # Các component React
 │   │   ├── auth/           # Route guard bảo vệ phân quyền (ProtectedRoute, GuestRoute)
-│   │   └── ui/             # Bộ UI component dùng chung (Card, StatCard, Badge, Button, Table, Input, Checkbox...)
-│   ├── contexts/           # Quản lý trạng thái toàn cục (AuthContext: login, register, logout, session)
-│   ├── data/               # Mock data, tài khoản mẫu và TypeScript interface
+│   │   └── ui/             # Bộ UI component nguyên tử (Card, StatCard, Badge, Button, SearchInput, Input, Checkbox)
+│   ├── contexts/           # Quản lý phiên làm việc & xác thực (AuthProvider, useAuth, types)
+│   ├── data/               # Mock data tập trung, tài khoản mẫu và TypeScript interface
 │   ├── layouts/            # Các khung layout bao bọc trang (MainLayout, AuthLayout)
-│   ├── pages/              # Các màn hình chính của ứng dụng (Login, Register, Dashboard...)
-│   ├── App.css             # Style bổ trợ cấp ứng dụng
-│   ├── App.tsx             # Định tuyến trung tâm (Routes, ProtectedRoute)
-│   ├── index.css           # Cấu hình Tailwind v4 @theme, font Inter và custom classes
+│   ├── pages/              # Các màn hình chính (kèm sub-components module hóa)
+│   │   ├── Login.tsx
+│   │   ├── Register.tsx
+│   │   ├── TrendOverview.tsx
+│   │   │   └── components/ # MacroStatsGrid, WeeklyDiscussionChart, PlatformSharePie, TrendingTopicsTable...
+│   │   ├── TopicDetail.tsx
+│   │   │   └── components/ # TopicHeader, TopicStatsGrid, DiscussionTrendChart, SentimentAnalysisCard...
+│   │   ├── TopicComparison.tsx
+│   │   │   └── components/ # TopicComparisonHeader, ComparisonSummaryCards, ComparisonCharts...
+│   │   ├── WatchedTopics.tsx
+│   │   │   └── components/ # WatchedTopicsHeader, AddTopicForm, WatchedTopicsTable...
+│   │   └── DataSources.tsx
+│   │       └── components/ # PlatformConnectionCards, DataSourcesTable, CollectionLogsTable...
+│   ├── App.tsx             # Định tuyến trung tâm với React.lazy & Suspense code splitting
+│   ├── index.css           # Cấu hình Tailwind v4 @theme, font Inter và custom scrollbar
 │   └── main.tsx            # Điểm khởi chạy React với BrowserRouter
 ├── index.html              # Template HTML gốc
 ├── package.json            # Khai báo dependency, scripts và cấu hình dự án
-├── postcss.config.js       # Cấu hình PostCSS
-├── tailwind.config.js      # Cấu hình mở rộng cho Tailwind
+├── postcss.config.js       # Cấu hình PostCSS với @tailwindcss/postcss
 ├── tsconfig.json           # Cấu hình TypeScript root
-└── vite.config.ts          # Cấu hình đóng gói Vite
+├── tsconfig.app.json       # Cấu hình TypeScript app với strict: true
+├── tsconfig.node.json      # Cấu hình TypeScript cho Vite build script
+└── vite.config.ts          # Cấu hình đóng gói Vite & chia tách manualChunks
 ```
 
 ---
@@ -107,69 +113,33 @@ frontend/
 | STT | Tên màn hình | Đường dẫn | File component | Chức năng chính |
 |:---:|:---|:---|:---|:---|
 | 1 | **Đăng nhập** | `/dang-nhap` | `src/pages/Login.tsx` | Form đăng nhập (email, mật khẩu, ẩn/hiện mật khẩu, ghi nhớ phiên, nút điền nhanh tài khoản demo). |
-| 2 | **Đăng ký** | `/dang-ky` | `src/pages/Register.tsx` | Form tạo tài khoản mới (họ tên, email, mật khẩu, xác nhận mật khẩu, đồng ý điều khoản) có kiểm tra hợp lệ và tự động đăng nhập. |
+| 2 | **Đăng ký** | `/dang-ky` | `src/pages/Register.tsx` | Form tạo tài khoản mới (họ tên, email, mật khẩu, xác nhận mật khẩu, đồng ý điều khoản) có kiểm tra hợp lệ, chống memory leak và tự động chuyển hướng. |
 
 ### Nhóm Dashboard (Dùng `MainLayout`, bảo vệ bằng `ProtectedRoute`)
 | STT | Tên màn hình | Đường dẫn | File component | Chức năng chính |
 |:---:|:---|:---|:---|:---|
-| 3 | **Tổng quan xu hướng** | `/tong-quan` (hoặc `/`) | `src/pages/TrendOverview.tsx` | 4 chỉ số vĩ mô, biểu đồ nhịp thảo luận tuần, cơ cấu nền tảng, banner xu hướng và bảng xếp hạng chủ đề. |
-| 4 | **Chi tiết chủ đề** | `/chi-tiet-chu-de` | `src/pages/TopicDetail.tsx` | Phân tích sâu chủ đề *AI trong giáo dục*: tóm tắt tự động, sắc thái cảm xúc, 3 góc nhìn chính, bình luận mẫu và dòng thời gian. |
-| 5 | **So sánh chủ đề** | `/so-sanh` | `src/pages/TopicComparison.tsx` | Đối chiếu song song (*AI trong giáo dục* vs *Giao thông xanh*): biểu đồ cột theo nền tảng, biểu đồ đường theo ngày và bảng metric chi tiết. |
-| 6 | **Chủ đề theo dõi** | `/theo-doi` | `src/pages/WatchedTopics.tsx` | Danh sách chủ đề theo dõi/tạm dừng, biểu mẫu thêm chủ đề mới (nhập từ khóa, tick nền tảng, chọn chu kỳ) và lịch sử hoạt động. |
-| 7 | **Quản lý nguồn dữ liệu** | `/nguon-du-lieu` | `src/pages/DataSources.tsx` | Tình trạng kết nối Facebook/Threads/Reddit, danh sách nguồn dữ liệu, nhật ký thu thập, lịch quét và chỉ số lọc nội dung rác. |
+| 3 | **Tổng quan xu hướng** | `/tong-quan` (hoặc `/`) | `src/pages/TrendOverview.tsx` | 4 chỉ số vĩ mô, biểu đồ nhịp thảo luận tuần, cơ cấu nền tảng, banner xu hướng và bảng xếp hạng chủ đề có bộ lọc và tìm kiếm. |
+| 4 | **Chi tiết chủ đề** | `/chi-tiet-chu-de?id=...` | `src/pages/TopicDetail.tsx` | Nhận tham số id linh hoạt: tóm tắt tự động, 4 card chỉ số, phân bổ sắc thái 3 màu, 3 góc nhìn chính, bình luận mẫu và bài viết nguồn. |
+| 5 | **So sánh chủ đề** | `/so-sanh` | `src/pages/TopicComparison.tsx` | Đối chiếu song song từ 2–5 chủ đề linh hoạt: biểu đồ cột nền tảng, biểu đồ đường theo ngày và bảng metric chi tiết. |
+| 6 | **Chủ đề theo dõi** | `/theo-doi` | `src/pages/WatchedTopics.tsx` | Danh sách chủ đề theo dõi, biểu mẫu thêm chủ đề mới có toggle, thao tác tạm dừng/tiếp tục/xóa và nhật ký hoạt động. |
+| 7 | **Quản lý nguồn dữ liệu** | `/nguon-du-lieu` | `src/pages/DataSources.tsx` | Tình trạng kết nối Facebook/Threads/Reddit, danh sách nguồn dữ liệu lọc theo nền tảng, banner chính sách bảo mật và log thu thập. |
 
 ---
 
-## 7. Cách làm việc với Mock Data & Quản lý người dùng
+## 7. Cách làm việc với Data & Quản lý người dùng
 
 ### Vị trí file
-Toàn bộ dữ liệu mẫu được đặt tại thư mục `src/data/`:
+Toàn bộ dữ liệu mẫu và TypeScript interfaces được tập trung tại thư mục `src/data/`:
 - `users.ts`: Danh sách tài khoản demo (`demo@gmail.com` / `123456`) và cấu hình storage keys.
-- `trendOverview.ts`: Số liệu tổng quan, dữ liệu biểu đồ tuần, danh sách chủ đề thịnh hành.
-- `topicDetail.ts`: Số liệu chi tiết một chủ đề, phân bổ sắc thái, bài viết nguồn, timeline.
-- `topicComparison.ts`: Số liệu đối chiếu giữa 2 chủ đề, bảng so sánh chi tiết.
+- `trendOverview.ts`: Số liệu vĩ mô, dữ liệu biểu đồ tuần, danh sách chủ đề thịnh hành.
+- `topicDetail.ts`: Cơ sở dữ liệu chi tiết đa chủ đề (hàm `getTopicDetail`), phân bổ sắc thái, bài viết nguồn.
+- `topicComparison.ts`: Số liệu đối chiếu động giữa 2–5 chủ đề, bảng so sánh chi tiết.
 - `watchedTopics.ts`: Danh sách chủ đề theo dõi, chu kỳ cập nhật, hoạt động gần đây.
-- `dataSources.ts`: Trạng thái các nền tảng, danh sách nguồn, log thu thập, thống kê lọc rác.
+- `dataSources.ts`: Trạng thái các nền tảng, danh sách nguồn, log thu thập.
 
 ### Cơ chế phiên làm việc (Auth & Session)
-- Phiên đăng nhập được quản lý qua `src/contexts/AuthContext.tsx` và lưu vào `localStorage`:
+- Phiên đăng nhập được quản lý qua `src/contexts/` (`AuthProvider`, `useAuth`) và lưu vào `localStorage`:
   - `socialpulse_current_user`: Lưu thông tin người dùng đang đăng nhập.
   - `socialpulse_users`: Lưu danh sách các tài khoản được đăng ký mới trên trình duyệt.
   - `socialpulse_remember_email`: Lưu email khi chọn "Ghi nhớ đăng nhập".
-- Khi chưa đăng nhập, nếu truy cập bất kỳ trang nào trong 5 trang dashboard, hệ thống sẽ tự động chuyển hướng về `/dang-nhap`.
-
-### Hướng dẫn kết nối API thật sau này
-1. **Tạo tầng API Client**: Tạo thư mục `src/services/` hoặc `src/api/` chứa các hàm gọi API (dùng `fetch` hoặc `axios`).
-2. **Tái sử dụng DTO/Interface**: Chuyển các `interface` trong `src/data/` sang `src/types/` để làm kiểu dữ liệu trả về của API.
-3. **Thay thế trong Component**: Tại các trang trong `src/pages/`, thay thế việc import biến dữ liệu tĩnh bằng gọi hàm API thông qua React Hook (`useEffect` + `useState`, hoặc React Query).
-4. **Bổ sung UI phản hồi**: Thêm trạng thái chờ (`loading`), thông báo lỗi (`error`) và trạng thái trống (`empty state`) khi API phản hồi.
-
----
-
-## 8. Quy ước Code & Hướng dẫn phát triển
-
-### Quy ước đặt tên
-- **Component & Layout**: Dùng `PascalCase` cho tên file và tên component (ví dụ: `TrendOverview.tsx`, `MainLayout.tsx`, `AuthLayout.tsx`, `Input.tsx`).
-- **File dữ liệu & tiện ích**: Dùng `camelCase` (ví dụ: `users.ts`, `trendOverview.ts`, `dataSources.ts`).
-- **Thư mục**: Dùng chữ thường `kebab-case` hoặc `camelCase` ngắn gọn (ví dụ: `src/components/ui/`, `src/contexts/`, `src/layouts/`).
-
-### Nơi đặt component dùng chung
-- Toàn bộ component UI nguyên tử tái sử dụng nhiều nơi (Card, StatCard, Badge, Button, Table, SearchInput, FilterBar, Input, Checkbox) nằm trong `src/components/ui/`.
-- Khi bổ sung component mới, export tập trung tại `src/components/ui/index.ts` để các trang khác import thuận tiện.
-- Layout dashboard đặt tại `src/layouts/MainLayout.tsx`, layout xác thực đặt tại `src/layouts/AuthLayout.tsx`.
-
-### Quy ước Tailwind CSS & Design Tokens
-Dự án sử dụng **Tailwind CSS v4** với các thông số thiết kế được khai báo tại `src/index.css`:
-
-- **Khung giao diện (Layout)**: Độ rộng nội dung tối ưu theo thiết kế Figma là `max-w-[1216px]` căn giữa (`mx-auto`). Card xác thực tối ưu `max-w-[460px]`.
-- **Màu nhấn chủ đạo (Primary - Indigo)**:
-  - Khai báo token CSS: `--color-primary-50` đến `--color-primary-950`.
-  - Class sử dụng chính: `bg-indigo-600` (`#4f46e5`) cho nút bấm/accent, `bg-indigo-50` (`#eef2ff`) cho nền active/highlight, `text-indigo-600` cho liên kết.
-- **Màu trạng thái (Status Colors)**:
-  - Hoạt động / Tăng trưởng / Thành công: Xanh lá (`emerald-50`, `emerald-600`, `emerald-700`).
-  - Tạm dừng / Cảnh báo: Vàng cam (`amber-50`, `amber-600`, `amber-700`).
-  - Lỗi / Tiêu cực: Đỏ hồng (`rose-50`, `rose-600`, `rose-700`).
-- **Font chữ (Typography)**:
-  - Font chữ mặc định: **Inter** (`font-sans`), áp dụng thông qua biến `--font-sans`.
-  - Tiêu đề trang: `text-2xl` hoặc `text-3xl`, `font-bold`, `tracking-tight`.
-
+- Khởi tạo trạng thái đăng nhập qua cơ chế Lazy State Initialization, giúp loại bỏ hoàn toàn hiện tượng nháy màn hình và cascading re-render.

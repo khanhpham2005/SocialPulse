@@ -2,150 +2,159 @@
 // Mock data for Trend Overview page
 // ============================================================
 
-export interface SummaryStat {
-  label: string
-  value: string
-  change: string
-  changePercent: string
-  description: string
-  icon: 'topic' | 'post' | 'comment' | 'interaction'
+export interface MacroStatItem {
+  id: string;
+  label: string;
+  value: string;
+  badge?: string;
+  description: string;
+  changeType?: 'positive' | 'negative' | 'neutral';
+  iconType: 'topic' | 'post' | 'comment' | 'interaction';
 }
 
-export interface WeeklyDiscussionPoint {
-  date: string
-  posts: number
+export interface WeeklyDataPoint {
+  date: string;
+  posts: number;
 }
 
 export interface PlatformDistributionItem {
-  platform: string
-  count: number
-  percent: number
-  color: string
+  name: string;
+  value: number;
+  percent: string;
+  color: string;
 }
 
-export interface TrendingTopic {
-  rank: string
-  name: string
-  posts: number
-  score: number
-  change: string
-  tags: string[]
-  platforms: ('facebook' | 'threads' | 'reddit')[]
-  summary: string
-  isFollowing?: boolean
+export interface TrendingTopicItem {
+  id: string;
+  rank: string;
+  title: string;
+  path: string;
+  summary: string;
+  category: string;
+  platforms: ('Facebook' | 'Threads' | 'Reddit')[];
+  posts: string;
+  score: number;
+  growth: string;
+  following: boolean;
 }
 
-// --------------- Summary Stats ---------------
-export const summaryStats: SummaryStat[] = [
+export const macroStats: MacroStatItem[] = [
   {
+    id: 'topics',
     label: 'Chủ đề được ghi nhận',
     value: '24',
-    change: '',
-    changePercent: '',
     description: 'Thuộc 5 lĩnh vực được theo dõi',
-    icon: 'topic',
+    iconType: 'topic',
   },
   {
+    id: 'posts',
     label: 'Bài viết công khai',
-    value: '6,840',
-    change: '+1,180',
-    changePercent: '+21%',
-    description: 'Sau khi loại nội dung tổ giấn có hại',
-    icon: 'post',
+    value: '6.840',
+    badge: '+21%',
+    changeType: 'positive',
+    description: 'Sau khi loại nội dung bị gắn cờ rác',
+    iconType: 'post',
   },
   {
+    id: 'comments',
     label: 'Bình luận được phân tích',
-    value: '24,680',
-    change: '+3,400',
-    changePercent: '+16%',
-    description: 'Quan tâm cá nhân đã được ưi',
-    icon: 'comment',
+    value: '24.680',
+    badge: '+16%',
+    changeType: 'positive',
+    description: 'Danh tính cá nhân đã được ẩn',
+    iconType: 'comment',
   },
   {
+    id: 'interactions',
     label: 'Lượt tương tác',
-    value: '98,700',
-    change: '+18,400',
-    changePercent: '+23%',
-    description: 'Lượt thích, chia sẻ và bình luận',
-    icon: 'interaction',
+    value: '98.700',
+    badge: '+23%',
+    changeType: 'positive',
+    description: 'Lượt thích, chia sẻ và phản hồi',
+    iconType: 'interaction',
   },
-]
+];
 
-// --------------- Weekly Discussion Data (Line Chart) ---------------
-export const weeklyDiscussionData: WeeklyDiscussionPoint[] = [
-  { date: '12/10', posts: 780 },
-  { date: '13/10', posts: 820 },
-  { date: '14/10', posts: 950 },
-  { date: '15/10', posts: 1100 },
-  { date: '16/10', posts: 1200 },
-  { date: '17/10', posts: 1050 },
-  { date: '18/10', posts: 940 },
-]
+export const weeklyData: WeeklyDataPoint[] = [
+  { date: '12/10', posts: 650 },
+  { date: '13/10', posts: 720 },
+  { date: '14/10', posts: 800 },
+  { date: '15/10', posts: 880 },
+  { date: '16/10', posts: 980 },
+  { date: '17/10', posts: 1180 },
+  { date: '18/10', posts: 1440 },
+];
 
-// --------------- Platform Distribution (Pie Chart) ---------------
-export const platformDistribution: PlatformDistributionItem[] = [
-  { platform: 'Facebook', count: 3420, percent: 50, color: '#1877F2' },
-  { platform: 'Threads', count: 2052, percent: 30, color: '#000000' },
-  { platform: 'Reddit', count: 1368, percent: 20, color: '#FF4500' },
-]
+export const platformData: PlatformDistributionItem[] = [
+  { name: 'Facebook', value: 3420, percent: '50%', color: '#2563eb' },
+  { name: 'Threads', value: 2052, percent: '30%', color: '#1e293b' },
+  { name: 'Reddit', value: 1368, percent: '20%', color: '#ea580c' },
+];
 
-// --------------- Trending Topics ---------------
-export const trendingTopics: TrendingTopic[] = [
+export const initialTrendingTopics: TrendingTopicItem[] = [
   {
+    id: 'topic-1',
     rank: '01',
-    name: 'AI trong giáo dục',
-    posts: 1240,
+    title: 'AI trong giáo dục',
+    path: '/chi-tiet-chu-de?id=topic-1',
+    summary: 'Thảo luận xoay quanh công cụ hỗ trợ học tập, chấm điểm tự động và băn khoăn về tính liêm chính học thuật.',
+    category: 'Giáo dục · Công nghệ',
+    platforms: ['Facebook', 'Threads', 'Reddit'],
+    posts: '1.240',
     score: 92,
-    change: '+32%',
-    tags: ['Giáo dục', 'Công nghệ'],
-    platforms: ['facebook', 'threads', 'reddit'],
-    summary:
-      'Chủ đề nổi bật nhất tuần với sự quan tâm lớn từ cộng đồng giáo dục và công nghệ. Các cuộc thảo luận tập trung vào ứng dụng AI trong giảng dạy, học tập cá nhân hóa và lo ngại về đạo đức.',
-    isFollowing: true,
+    growth: '+32%',
+    following: true,
   },
   {
+    id: 'topic-2',
     rank: '02',
-    name: 'Giao thông xanh',
-    posts: 980,
+    title: 'Giao thông xanh',
+    path: '/chi-tiet-chu-de?id=topic-2',
+    summary: 'Cộng đồng trao đổi về mở rộng lộ trình xe buýt điện, hạ tầng trạm sạc công cộng và trải nghiệm phương tiện cá nhân.',
+    category: 'Đô thị · Môi trường',
+    platforms: ['Facebook', 'Threads'],
+    posts: '980',
     score: 86,
-    change: '+24%',
-    tags: ['Đời sống'],
-    platforms: ['facebook', 'threads', 'reddit'],
-    summary:
-      'Xu hướng thảo luận tăng mạnh về giao thông xanh, đặc biệt sau các chính sách mới về xe điện và mở rộng hệ thống xe buýt điện tại các thành phố lớn.',
+    growth: '+24%',
+    following: false,
   },
   {
+    id: 'topic-3',
     rank: '03',
-    name: 'Kỹ năng số cho người trẻ',
-    posts: 760,
+    title: 'Kỹ năng số cho người trẻ',
+    path: '/chi-tiet-chu-de?id=topic-3',
+    summary: 'Chia sẻ khóa học kỹ năng số miễn phí, kinh nghiệm tự học và thích ứng với yêu cầu tuyển dụng mới.',
+    category: 'Nghề nghiệp · Giáo dục',
+    platforms: ['Facebook', 'Threads'],
+    posts: '760',
     score: 81,
-    change: '+18%',
-    tags: ['Công nghệ'],
-    platforms: ['facebook', 'threads'],
-    summary:
-      'Cộng đồng thảo luận sôi nổi về việc trang bị kỹ năng số cho thế hệ trẻ, bao gồm lập trình, phân tích dữ liệu và an toàn trên không gian mạng.',
-    isFollowing: true,
+    growth: '+18%',
+    following: true,
   },
   {
+    id: 'topic-4',
     rank: '04',
-    name: 'Tiêu dùng bền vững',
-    posts: 620,
+    title: 'Tiêu dùng bền vững',
+    path: '/chi-tiet-chu-de?id=topic-4',
+    summary: 'Thảo luận về giảm rác thải nhựa, thời trang tuần hoàn và chọn sản phẩm thân thiện môi trường trong sinh hoạt.',
+    category: 'Lối sống · Tiêu dùng',
+    platforms: ['Facebook', 'Reddit'],
+    posts: '620',
     score: 74,
-    change: '+12%',
-    tags: ['Kinh tế'],
-    platforms: ['facebook', 'threads', 'reddit'],
-    summary:
-      'Người tiêu dùng ngày càng quan tâm đến sản phẩm thân thiện môi trường, hàng tái chế và lối sống tối giản. Các thương hiệu xanh được thảo luận nhiều.',
+    growth: '+12%',
+    following: false,
   },
   {
+    id: 'topic-5',
     rank: '05',
-    name: 'Chạy bộ cộng đồng',
-    posts: 480,
+    title: 'Chạy bộ cộng đồng',
+    path: '/chi-tiet-chu-de?id=topic-5',
+    summary: 'Phong trào chạy bộ cuối tuần, các câu lạc bộ tại địa phương và chia sẻ lịch trình rèn luyện thể lực.',
+    category: 'Thể thao · Sức khỏe',
+    platforms: ['Facebook', 'Threads'],
+    posts: '480',
     score: 69,
-    change: '+9%',
-    tags: ['Thể thao'],
-    platforms: ['facebook', 'threads'],
-    summary:
-      'Phong trào chạy bộ cộng đồng tiếp tục lan rộng với nhiều sự kiện marathon và fun run được tổ chức tại các thành phố. Cộng đồng chia sẻ kinh nghiệm tập luyện và dinh dưỡng.',
+    growth: '+9%',
+    following: false,
   },
-]
+];

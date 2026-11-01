@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts';
 import { Input, Checkbox, Button } from '../components/ui';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
@@ -17,6 +17,15 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +68,7 @@ const Register: React.FC = () => {
       const result = await register({ name, email, password });
       if (result.success) {
         setSuccessMessage('Đăng ký tài khoản thành công! Đang chuyển hướng vào hệ thống...');
-        setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           navigate('/tong-quan', { replace: true });
         }, 1200);
       } else {
@@ -84,7 +93,7 @@ const Register: React.FC = () => {
         </Link>
         <button
           type="button"
-          className="w-1/2 py-2 text-center text-sm font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition-all"
+          className="w-1/2 py-2 text-center text-sm font-semibold rounded-lg bg-white text-sky-600 shadow-sm transition-all"
         >
           Đăng ký
         </button>
@@ -169,7 +178,7 @@ const Register: React.FC = () => {
                     ev.preventDefault();
                     alert('Chính sách và điều khoản dịch vụ SocialPulse demo.');
                   }}
-                  className="text-indigo-600 font-semibold hover:underline"
+                  className="text-sky-600 font-semibold hover:underline"
                 >
                   Điều khoản sử dụng
                 </button>{' '}
@@ -180,7 +189,7 @@ const Register: React.FC = () => {
                     ev.preventDefault();
                     alert('Chính sách bảo mật dữ liệu SocialPulse demo.');
                   }}
-                  className="text-indigo-600 font-semibold hover:underline"
+                  className="text-sky-600 font-semibold hover:underline"
                 >
                   Chính sách bảo mật
                 </button>{' '}
@@ -194,7 +203,7 @@ const Register: React.FC = () => {
         <Button
           type="submit"
           disabled={isSubmitting || !!successMessage}
-          className="w-full mt-2 py-2.5 rounded-xl font-medium shadow-sm transition-all bg-indigo-600 hover:bg-indigo-700 text-white"
+          className="w-full mt-2 py-2.5 rounded-xl font-medium shadow-sm transition-all bg-sky-600 hover:bg-sky-700 text-white"
         >
           {isSubmitting ? 'Đang tạo tài khoản...' : 'Tạo tài khoản'}
         </Button>
@@ -203,7 +212,7 @@ const Register: React.FC = () => {
       {/* Footer link to Login */}
       <div className="mt-6 text-center text-xs text-gray-500">
         <span>Đã có tài khoản? </span>
-        <Link to="/dang-nhap" className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline">
+        <Link to="/dang-nhap" className="font-semibold text-sky-600 hover:text-sky-700 hover:underline">
           Đăng nhập
         </Link>
       </div>

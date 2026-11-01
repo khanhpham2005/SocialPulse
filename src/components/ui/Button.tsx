@@ -8,13 +8,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<string, string> = {
   primary:
-    'bg-indigo-500 text-white hover:bg-indigo-600 active:bg-indigo-700 shadow-sm',
+    'bg-sky-600 text-white hover:bg-sky-700 active:bg-sky-800 shadow-sm shadow-sky-600/20',
   secondary:
-    'bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300',
+    'bg-sky-50 text-sky-800 hover:bg-sky-100 active:bg-sky-200',
   outline:
-    'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 active:bg-gray-100',
+    'border border-sky-200 text-sky-800 bg-white hover:bg-sky-50 active:bg-sky-100',
   ghost:
-    'text-gray-600 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200',
+    'text-sky-700 hover:bg-sky-50 hover:text-sky-900 active:bg-sky-100',
 };
 
 const sizeStyles: Record<string, string> = {
@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
       disabled={disabled}
       {...props}
     >

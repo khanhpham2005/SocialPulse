@@ -30,8 +30,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             <div
               className={`w-4 h-4 rounded border transition-colors flex items-center justify-center ${
                 checked
-                  ? 'bg-indigo-600 border-indigo-600 text-white'
-                  : 'bg-white border-gray-300 group-hover:border-indigo-400'
+                  ? 'bg-sky-600 border-sky-600 text-white'
+                  : 'bg-white border-gray-300 group-hover:border-sky-400'
               } ${error ? 'border-rose-400' : ''} ${className}`}
             >
               {checked && <Check className="h-3 w-3 stroke-[3]" />}

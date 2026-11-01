@@ -33,7 +33,7 @@ const StatCard: React.FC<StatCardProps> = ({
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 relative flex flex-col gap-2">
       {/* Icon in top-right */}
       {icon && (
-        <div className="absolute top-4 right-4 text-indigo-500 bg-indigo-50 rounded-lg p-2">
+        <div className="absolute top-4 right-4 text-sky-600 bg-sky-50 rounded-lg p-2">
           {icon}
         </div>
       )}

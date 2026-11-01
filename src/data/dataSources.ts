@@ -2,270 +2,152 @@
 // Mock data for Data Sources page
 // ============================================================
 
-export interface PlatformSummaryCard {
-  platform: string
-  sourceCount: number
-  status: string
-  statusType: 'success' | 'warning' | 'error'
-  color: string
-  icon: 'facebook' | 'threads' | 'reddit'
+export interface DataSourceItem {
+  id: string;
+  name: string;
+  sub: string;
+  platform: 'Facebook' | 'Threads' | 'Reddit';
+  cycle: string;
+  lastRun: string;
+  status: 'active' | 'paused' | 'error';
+  statusText: string;
 }
 
-export interface DataSource {
-  id: string
-  name: string
-  type: string
-  platform: 'Facebook' | 'Threads' | 'Reddit'
-  cycle: string
-  lastUpdate: string
-  status: 'Đang hoạt động' | 'Tạm dừng' | 'Lỗi giới hạn truy cập'
-  statusType: 'success' | 'warning' | 'error'
+export interface CollectionLogItem {
+  id: string;
+  time: string;
+  platform: 'Facebook' | 'Threads' | 'Reddit';
+  desc: string;
+  status: 'success' | 'error';
+  statusText: string;
 }
 
-export interface CollectionLogEntry {
-  id: string
-  time: string
-  platform: 'Facebook' | 'Threads' | 'Reddit'
-  description: string
-  status: 'success' | 'error'
+export interface PlatformConnectionStatus {
+  platform: 'Facebook' | 'Threads' | 'Reddit';
+  status: string;
+  badgeVariant: 'green' | 'yellow' | 'red';
+  note: string;
+  lastSync: string;
 }
 
-export interface CollectionScheduleItem {
-  platform: string
-  schedule: string
-  nextRun: string
-}
-
-export interface SpamFilterStats {
-  total: number
-  spam: number
-  clean: number
-  breakdown: SpamBreakdownItem[]
-}
-
-export interface SpamBreakdownItem {
-  label: string
-  count: number
-  percent: number
-  color: string
-}
-
-export interface AnalysisRule {
-  name: string
-  description: string
-  status: 'active' | 'inactive'
-}
-
-// --------------- Platform Summary ---------------
-export const platformSummary: PlatformSummaryCard[] = [
+export const platformConnectionList: PlatformConnectionStatus[] = [
   {
     platform: 'Facebook',
-    sourceCount: 6,
-    status: 'Kết nối ổn định',
-    statusType: 'success',
-    color: '#1877F2',
-    icon: 'facebook',
+    status: 'Đang hoạt động',
+    badgeVariant: 'green',
+    note: 'Thu thập từ 3 Fanpage & 1 Nhóm công khai',
+    lastSync: '16:00 · 18/10',
   },
   {
     platform: 'Threads',
-    sourceCount: 3,
-    status: 'Kết nối ổn định',
-    statusType: 'success',
-    color: '#000000',
-    icon: 'threads',
+    status: 'Đang hoạt động',
+    badgeVariant: 'green',
+    note: 'Thu thập theo 2 thẻ từ khóa công khai',
+    lastSync: '18:00 · 18/10',
   },
   {
     platform: 'Reddit',
-    sourceCount: 3,
-    status: 'Cần kiểm tra',
-    statusType: 'warning',
-    color: '#FF4500',
-    icon: 'reddit',
+    status: 'Giới hạn truy cập',
+    badgeVariant: 'yellow',
+    note: 'Đang áp dụng tần suất dãn cách an toàn (6 giờ/lần)',
+    lastSync: '12:00 · 18/10',
   },
-]
+];
 
-// --------------- Source List ---------------
-export const sourceList: DataSource[] = [
+export const initialDataSources: DataSourceItem[] = [
   {
-    id: 'src-1',
-    name: 'Giáo dục Việt Nam',
-    type: 'Fanpage',
+    id: '1',
+    name: 'Diễn đàn Giáo dục số',
+    sub: 'Trang công khai · Nguồn demo',
     platform: 'Facebook',
     cycle: '2 giờ',
-    lastUpdate: '18:00 18/10/2026',
-    status: 'Đang hoạt động',
-    statusType: 'success',
+    lastRun: '16:00 · 18/10',
+    status: 'active',
+    statusText: 'Đang hoạt động',
   },
   {
-    id: 'src-2',
-    name: 'Công nghệ & Đời sống',
-    type: 'Fanpage',
+    id: '2',
+    name: 'Di chuyển bền vững',
+    sub: 'Trang công khai · Nguồn demo',
     platform: 'Facebook',
     cycle: '2 giờ',
-    lastUpdate: '18:00 18/10/2026',
-    status: 'Đang hoạt động',
-    statusType: 'success',
+    lastRun: '16:00 · 18/10',
+    status: 'active',
+    statusText: 'Đang hoạt động',
   },
   {
-    id: 'src-3',
-    name: 'Nhóm Giáo viên Sáng tạo',
-    type: 'Nhóm công khai',
-    platform: 'Facebook',
-    cycle: '4 giờ',
-    lastUpdate: '16:00 18/10/2026',
-    status: 'Đang hoạt động',
-    statusType: 'success',
-  },
-  {
-    id: 'src-4',
-    name: 'Tech Education VN',
-    type: 'Tài khoản',
+    id: '3',
+    name: '#hoctapso',
+    sub: 'Từ khóa công khai · Nguồn demo',
     platform: 'Threads',
-    cycle: '3 giờ',
-    lastUpdate: '17:30 18/10/2026',
-    status: 'Đang hoạt động',
-    statusType: 'success',
+    cycle: '1 giờ',
+    lastRun: '18:00 · 18/10',
+    status: 'active',
+    statusText: 'Đang hoạt động',
   },
   {
-    id: 'src-5',
-    name: 'Xu hướng Threads VN',
-    type: 'Hashtag',
-    platform: 'Threads',
+    id: '4',
+    name: 'r/GreenMobilityDemo',
+    sub: 'Cộng đồng công khai · Nguồn demo',
+    platform: 'Reddit',
     cycle: '6 giờ',
-    lastUpdate: '12:00 18/10/2026',
-    status: 'Tạm dừng',
-    statusType: 'warning',
-  },
-  {
-    id: 'src-6',
-    name: 'r/GiaoDucVN',
-    type: 'Subreddit',
-    platform: 'Reddit',
-    cycle: '4 giờ',
-    lastUpdate: '16:00 18/10/2026',
-    status: 'Đang hoạt động',
-    statusType: 'success',
-  },
-  {
-    id: 'src-7',
-    name: 'r/VietnamTech',
-    type: 'Subreddit',
-    platform: 'Reddit',
-    cycle: '4 giờ',
-    lastUpdate: '08:00 18/10/2026',
-    status: 'Lỗi giới hạn truy cập',
-    statusType: 'error',
-  },
-]
-
-// --------------- Collection Log ---------------
-export const collectionLog: CollectionLogEntry[] = [
-  {
-    id: 'log-1',
-    time: '18:00 18/10/2026',
-    platform: 'Facebook',
-    description: 'Thu thập thành công 128 bài viết mới từ 6 nguồn Facebook.',
-    status: 'success',
-  },
-  {
-    id: 'log-2',
-    time: '17:30 18/10/2026',
-    platform: 'Threads',
-    description: 'Thu thập thành công 45 bài viết mới từ Tech Education VN.',
-    status: 'success',
-  },
-  {
-    id: 'log-3',
-    time: '16:00 18/10/2026',
-    platform: 'Reddit',
-    description: 'Thu thập thành công 32 bài viết từ r/GiaoDucVN.',
-    status: 'success',
-  },
-  {
-    id: 'log-4',
-    time: '08:00 18/10/2026',
-    platform: 'Reddit',
-    description: 'Lỗi khi thu thập từ r/VietnamTech: vượt quá giới hạn API (rate limit). Sẽ thử lại sau 2 giờ.',
+    lastRun: '12:00 · 18/10',
     status: 'error',
+    statusText: 'Lỗi giới hạn truy cập',
   },
-]
-
-// --------------- Collection Schedule ---------------
-export const collectionSchedule: CollectionScheduleItem[] = [
   {
+    id: '5',
+    name: 'Chạy bộ mỗi ngày',
+    sub: 'Trang công khai · Nguồn demo',
     platform: 'Facebook',
-    schedule: 'Mỗi 2 giờ (Fanpage), Mỗi 4 giờ (Nhóm)',
-    nextRun: '20:00 18/10/2026',
+    cycle: '6 giờ',
+    lastRun: '06:00 · 18/10',
+    status: 'paused',
+    statusText: 'Tạm dừng',
   },
   {
+    id: '6',
+    name: '#kynangso',
+    sub: 'Từ khóa công khai · Nguồn demo',
     platform: 'Threads',
-    schedule: 'Mỗi 3 giờ (Tài khoản), Mỗi 6 giờ (Hashtag)',
-    nextRun: '20:30 18/10/2026',
+    cycle: '2 giờ',
+    lastRun: '10:00 · 18/10',
+    status: 'paused',
+    statusText: 'Tạm dừng',
+  },
+];
+
+export const collectionLogs: CollectionLogItem[] = [
+  {
+    id: 'l1',
+    time: '18:00 · 18/10',
+    platform: 'Facebook',
+    desc: '255 bài nhận về · 240 hợp lệ · 15 bài rác đã lọc',
+    status: 'success',
+    statusText: 'Thành công',
   },
   {
+    id: 'l2',
+    time: '18:00 · 18/10',
+    platform: 'Threads',
+    desc: '142 bài nhận về · 138 hợp lệ · 4 bài rác đã lọc',
+    status: 'success',
+    statusText: 'Thành công',
+  },
+  {
+    id: 'l3',
+    time: '16:00 · 18/10',
+    platform: 'Facebook',
+    desc: '210 bài nhận về · 202 hợp lệ · 8 bài rác đã lọc',
+    status: 'success',
+    statusText: 'Thành công',
+  },
+  {
+    id: 'l4',
+    time: '12:00 · 18/10',
     platform: 'Reddit',
-    schedule: 'Mỗi 4 giờ (Subreddit)',
-    nextRun: '20:00 18/10/2026',
+    desc: 'API phản hồi HTTP 429 · Chờ 6 giờ trước chu kỳ quét tiếp theo',
+    status: 'error',
+    statusText: 'Tạm dừng do giới hạn',
   },
-]
-
-// --------------- Spam Filter Stats ---------------
-export const spamFilterStats: SpamFilterStats = {
-  total: 7440,
-  spam: 600,
-  clean: 6840,
-  breakdown: [
-    {
-      label: 'Nội dung sạch',
-      count: 6840,
-      percent: 91.9,
-      color: '#10B981',
-    },
-    {
-      label: 'Spam / Quảng cáo',
-      count: 360,
-      percent: 4.8,
-      color: '#F59E0B',
-    },
-    {
-      label: 'Nội dung có hại',
-      count: 180,
-      percent: 2.4,
-      color: '#EF4444',
-    },
-    {
-      label: 'Trùng lặp',
-      count: 60,
-      percent: 0.8,
-      color: '#6B7280',
-    },
-  ],
-}
-
-// --------------- Analysis Rules ---------------
-export const analysisRules: AnalysisRule[] = [
-  {
-    name: 'Phát hiện spam tự động',
-    description:
-      'Sử dụng mô hình NLP để phát hiện và loại bỏ bài viết spam, quảng cáo và nội dung không liên quan trước khi phân tích.',
-    status: 'active',
-  },
-  {
-    name: 'Lọc nội dung trùng lặp',
-    description:
-      'So sánh nội dung bài viết để phát hiện bài đăng lại (repost) và nội dung sao chép, giữ lại bài gốc có tương tác cao nhất.',
-    status: 'active',
-  },
-  {
-    name: 'Phân tích cảm xúc',
-    description:
-      'Áp dụng mô hình phân tích cảm xúc tiếng Việt để phân loại bình luận thành tích cực, trung lập và tiêu cực.',
-    status: 'active',
-  },
-  {
-    name: 'Phát hiện nội dung có hại',
-    description:
-      'Sử dụng bộ lọc từ khóa và mô hình AI để phát hiện nội dung vi phạm, kích động hoặc có hại cho cộng đồng.',
-    status: 'active',
-  },
-]
+];

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts';
 import { Input, Checkbox, Button } from '../components/ui';
 import { AlertCircle, KeyRound } from 'lucide-react';
 
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
       <div className="bg-gray-100/80 p-1 rounded-xl flex items-center">
         <button
           type="button"
-          className="w-1/2 py-2 text-center text-sm font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition-all"
+          className="w-1/2 py-2 text-center text-sm font-semibold rounded-lg bg-white text-sky-600 shadow-sm transition-all"
         >
           Đăng nhập
         </button>
@@ -110,7 +110,7 @@ const Login: React.FC = () => {
           <button
             type="button"
             onClick={() => alert('Chức năng khôi phục mật khẩu đang phát triển cho bản thử nghiệm. Bạn có thể sử dụng tài khoản demo bên dưới.')}
-            className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
+            className="text-xs font-semibold text-sky-600 hover:text-sky-700 hover:underline transition-colors"
           >
             Quên mật khẩu?
           </button>
@@ -120,22 +120,22 @@ const Login: React.FC = () => {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full mt-2 py-2.5 rounded-xl font-medium shadow-sm transition-all bg-indigo-600 hover:bg-indigo-700 text-white"
+          className="w-full mt-2 py-2.5 rounded-xl font-medium shadow-sm transition-all bg-sky-600 hover:bg-sky-700 text-white"
         >
           {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
         </Button>
       </form>
 
       {/* Demo helper card */}
-      <div className="mt-6 p-3 rounded-xl bg-indigo-50/50 border border-indigo-100 flex items-center justify-between text-xs text-indigo-900">
+      <div className="mt-6 p-3 rounded-xl bg-sky-50/60 border border-sky-100 flex items-center justify-between text-xs text-sky-950">
         <div className="flex items-center gap-2">
-          <KeyRound className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
-          <span>Demo: <strong className="font-semibold text-indigo-700">demo@gmail.com</strong> / <strong>123456</strong></span>
+          <KeyRound className="h-3.5 w-3.5 text-sky-600 shrink-0" />
+          <span>Demo: <strong className="font-semibold text-sky-700">demo@gmail.com</strong> / <strong>123456</strong></span>
         </div>
         <button
           type="button"
           onClick={fillDemoAccount}
-          className="text-indigo-600 font-semibold hover:underline shrink-0 text-[11px]"
+          className="text-sky-600 font-semibold hover:underline shrink-0 text-[11px]"
         >
           Điền nhanh
         </button>
@@ -144,7 +144,7 @@ const Login: React.FC = () => {
       {/* Footer link to Register */}
       <div className="mt-6 text-center text-xs text-gray-500">
         <span>Chưa có tài khoản? </span>
-        <Link to="/dang-ky" className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline">
+        <Link to="/dang-ky" className="font-semibold text-sky-600 hover:text-sky-700 hover:underline">
           Đăng ký
         </Link>
       </div>

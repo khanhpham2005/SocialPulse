@@ -1,230 +1,314 @@
 // ============================================================
-// Mock data for Topic Detail page (AI trong giáo dục)
+// Mock data for Topic Detail page
 // ============================================================
 
-export interface TopicInfo {
-  name: string
-  category: string
-  description: string
-  dateRange: string
-}
-
-export interface TopicStat {
-  label: string
-  value: string
-  change: string
-  changePercent: string
-  icon: 'post' | 'comment' | 'interaction' | 'score'
+export interface TopicStatItem {
+  id: string;
+  label: string;
+  value: string;
+  badge?: string;
+  changeType?: 'positive' | 'negative' | 'neutral';
+  description: string;
 }
 
 export interface DiscussionTrendPoint {
-  date: string
-  posts: number
+  date: string;
+  posts: number;
 }
 
 export interface SentimentData {
-  positive: number
-  neutral: number
-  negative: number
-  positiveCount: number
-  neutralCount: number
-  negativeCount: number
+  positivePercent: number;
+  neutralPercent: number;
+  negativePercent: number;
+  positiveCount: string;
+  neutralCount: string;
+  negativeCount: string;
 }
 
-export interface KeyInsight {
-  title: string
-  description: string
-  type: 'application' | 'concern' | 'question'
+export interface KeyPerspectiveItem {
+  title: string;
+  tag: string;
+  tagColor: 'indigo' | 'yellow' | 'red';
+  description: string;
 }
 
-export interface SampleComment {
-  author: string
-  platform: 'facebook' | 'threads' | 'reddit'
-  text: string
-  type: 'positive' | 'neutral' | 'negative'
+export interface SampleCommentItem {
+  id: string;
+  platform: 'Facebook' | 'Threads' | 'Reddit';
+  channel: string;
+  time: string;
+  content: string;
+  sentiment: 'positive' | 'neutral' | 'negative';
+  sentimentLabel: string;
 }
 
-export interface SourcePost {
-  platform: 'facebook' | 'threads' | 'reddit'
-  source: string
-  title: string
-  date: string
-  description: string
-  interactions: number
+export interface SourcePostItem {
+  id: string;
+  platform: 'Facebook' | 'Threads' | 'Reddit';
+  sourceName: string;
+  time: string;
+  title: string;
+  excerpt: string;
+  likes: string;
+  comments: string;
+  shares: string;
 }
 
-export interface TimelineEvent {
-  date: string
-  title: string
-  description: string
-  sources: number
+export interface TopicDetailData {
+  id: string;
+  title: string;
+  category: string;
+  subtitle: string;
+  summaryText: string;
+  stats: TopicStatItem[];
+  trend: DiscussionTrendPoint[];
+  sentiment: SentimentData;
+  perspectives: KeyPerspectiveItem[];
+  sampleComments: SampleCommentItem[];
+  samplePosts: SourcePostItem[];
 }
 
-// --------------- Topic Info ---------------
-export const topicInfo: TopicInfo = {
-  name: 'AI trong giáo dục',
-  category: 'Giáo dục · Công nghệ',
-  description:
-    'Chủ đề về việc ứng dụng trí tuệ nhân tạo (AI) trong lĩnh vực giáo dục, bao gồm các công cụ hỗ trợ giảng dạy, học tập cá nhân hóa, và tác động của AI đến phương pháp giáo dục truyền thống.',
-  dateRange: '12-18/10/2026',
-}
+export const TOPICS_DATABASE: Record<string, TopicDetailData> = {
+  'topic-1': {
+    id: 'topic-1',
+    title: 'AI trong giáo dục',
+    category: 'Giáo dục · Công nghệ',
+    subtitle: 'Theo dõi cách cộng đồng trao đổi về AI trong học tập và giảng dạy.',
+    summaryText:
+      'Chủ đề AI trong giáo dục ghi nhận 1.240 bài viết công khai trong tuần, tăng 32% so với chu kỳ trước. Nhịp thảo luận đạt đỉnh vào ngày 17-18/10 khi nhiều diễn đàn chia sẻ kinh nghiệm ứng dụng công cụ soạn giáo án và trợ lý học tập. Ý kiến nhìn chung tích cực nhưng xuất hiện lo ngại về tính minh bạch khi làm bài kiểm tra.',
+    stats: [
+      {
+        id: 'posts',
+        label: 'Bài viết công khai',
+        value: '1.240',
+        badge: '+32%',
+        changeType: 'positive',
+        description: 'Tăng mạnh từ ngày 15/10',
+      },
+      {
+        id: 'comments',
+        label: 'Bình luận thảo luận',
+        value: '4.860',
+        badge: '+18%',
+        changeType: 'positive',
+        description: 'Trung bình 3,9 bình luận/bài',
+      },
+      {
+        id: 'interactions',
+        label: 'Lượt tương tác',
+        value: '18.600',
+        badge: '+24%',
+        changeType: 'positive',
+        description: 'Thích, chia sẻ và phản hồi',
+      },
+      {
+        id: 'score',
+        label: 'Điểm xu hướng',
+        value: '92 / 100',
+        badge: 'Rất cao',
+        changeType: 'positive',
+        description: 'Thuộc top 5% chủ đề sôi nổi',
+      },
+    ],
+    trend: [
+      { date: '12/10', posts: 100 },
+      { date: '13/10', posts: 130 },
+      { date: '14/10', posts: 155 },
+      { date: '15/10', posts: 160 },
+      { date: '16/10', posts: 200 },
+      { date: '17/10', posts: 245 },
+      { date: '18/10', posts: 290 },
+    ],
+    sentiment: {
+      positivePercent: 55,
+      neutralPercent: 36,
+      negativePercent: 9,
+      positiveCount: '2.670',
+      neutralCount: '1.750',
+      negativeCount: '440',
+    },
+    perspectives: [
+      {
+        title: 'Công cụ giảm tải cho giáo viên',
+        tag: 'Góc nhìn ứng dụng',
+        tagColor: 'indigo',
+        description:
+          'Nhiều bài viết chia sẻ cách dùng mô hình ngôn ngữ lớn để gợi ý dàn bài, soạn bài tập trắc nghiệm và gợi ý tài liệu học tập theo năng lực từng học sinh.',
+      },
+      {
+        title: 'Băn khoăn về tính liêm chính học thuật',
+        tag: 'Mối bận tâm',
+        tagColor: 'yellow',
+        description:
+          'Một số ý kiến bày tỏ lo ngại học sinh lạm dụng công cụ trả lời tự động trong bài kiểm tra về nhà, kiến nghị bổ sung tiêu chí đánh giá tại lớp.',
+      },
+      {
+        title: 'Cần khung hướng dẫn sử dụng rõ ràng',
+        tag: 'Đề xuất giải pháp',
+        tagColor: 'indigo',
+        description:
+          'Cộng đồng kỳ vọng nhà trường và cơ sở đào tạo sớm ban hành quy định minh bạch về phạm vi được phép ứng dụng công cụ số trong nghiên cứu.',
+      },
+    ],
+    sampleComments: [
+      {
+        id: 'c1',
+        platform: 'Facebook',
+        channel: 'Nhóm Giáo viên đổi mới',
+        time: '18:10 · 18/10',
+        content: '“Dùng thử để lên ý tưởng bài giảng thấy tiết kiệm được rất nhiều thời gian chuẩn bị.”',
+        sentiment: 'positive',
+        sentimentLabel: 'Tích cực',
+      },
+      {
+        id: 'c2',
+        platform: 'Threads',
+        channel: '@giaoduc_hien_dai',
+        time: '16:45 · 18/10',
+        content: '“Quan trọng là học sinh có hiểu bản chất bài học hay chỉ copy nguyên câu trả lời.”',
+        sentiment: 'neutral',
+        sentimentLabel: 'Trung tính',
+      },
+      {
+        id: 'c3',
+        platform: 'Reddit',
+        channel: 'r/VietnamEducation',
+        time: '14:20 · 18/10',
+        content: '“Cần sớm có quy định cụ thể về việc dùng công cụ AI trong các bài tiểu luận tốt nghiệp.”',
+        sentiment: 'negative',
+        sentimentLabel: 'Lo ngại',
+      },
+    ],
+    samplePosts: [
+      {
+        id: 'p1',
+        platform: 'Facebook',
+        sourceName: 'Diễn đàn Giáo dục số',
+        time: '15:30 · 18/10/2026',
+        title: 'Kinh nghiệm ứng dụng công cụ tự động hóa vào soạn giảng bài tập thực hành',
+        excerpt:
+          'Chia sẻ 5 phương pháp tích hợp trợ lý ảo giúp tiết kiệm 40% thời gian biên soạn câu hỏi đánh giá theo chuẩn đầu ra...',
+        likes: '342',
+        comments: '86',
+        shares: '45',
+      },
+      {
+        id: 'p2',
+        platform: 'Threads',
+        sourceName: '#hoctapso',
+        time: '12:15 · 18/10/2026',
+        title: 'Sinh viên năm nhất và câu chuyện thích ứng công nghệ mới trong giảng đường',
+        excerpt:
+          'Góc nhìn từ bạn trẻ về cách cân bằng giữa việc tự tư duy nghiên cứu và tận dụng công nghệ hỗ trợ tìm kiếm tài liệu...',
+        likes: '189',
+        comments: '42',
+        shares: '12',
+      },
+    ],
+  },
+  'topic-2': {
+    id: 'topic-2',
+    title: 'Giao thông xanh',
+    category: 'Đô thị · Môi trường',
+    subtitle: 'Theo dõi cách cộng đồng trao đổi về chuyển đổi phương tiện xanh và trạm sạc.',
+    summaryText:
+      'Chủ đề Giao thông xanh ghi nhận 980 bài viết trong tuần, tăng 24%. Các thảo luận tập trung vào sự tiện lợi của xe buýt điện công cộng và các tuyến tàu điện đô thị mới.',
+    stats: [
+      {
+        id: 'posts',
+        label: 'Bài viết công khai',
+        value: '980',
+        badge: '+24%',
+        changeType: 'positive',
+        description: 'Tập trung ở các thành phố lớn',
+      },
+      {
+        id: 'comments',
+        label: 'Bình luận thảo luận',
+        value: '3.920',
+        badge: '+12%',
+        changeType: 'positive',
+        description: 'Trung bình 4,0 bình luận/bài',
+      },
+      {
+        id: 'interactions',
+        label: 'Lượt tương tác',
+        value: '14.200',
+        badge: '+19%',
+        changeType: 'positive',
+        description: 'Thích, chia sẻ và phản hồi',
+      },
+      {
+        id: 'score',
+        label: 'Điểm xu hướng',
+        value: '86 / 100',
+        badge: 'Cao',
+        changeType: 'positive',
+        description: 'Chủ đề tăng trưởng bền vững',
+      },
+    ],
+    trend: [
+      { date: '12/10', posts: 80 },
+      { date: '13/10', posts: 100 },
+      { date: '14/10', posts: 120 },
+      { date: '15/10', posts: 140 },
+      { date: '16/10', posts: 165 },
+      { date: '17/10', posts: 185 },
+      { date: '18/10', posts: 190 },
+    ],
+    sentiment: {
+      positivePercent: 62,
+      neutralPercent: 28,
+      negativePercent: 10,
+      positiveCount: '2.430',
+      neutralCount: '1.097',
+      negativeCount: '393',
+    },
+    perspectives: [
+      {
+        title: 'Trải nghiệm phương tiện sạch êm ái',
+        tag: 'Góc nhìn người dùng',
+        tagColor: 'indigo',
+        description: 'Đánh giá cao chất lượng phục vụ của xe buýt điện, không khí trong lành hơn và thanh toán không tiền mặt tiện lợi.',
+      },
+      {
+        title: 'Mong muốn mở rộng mạng lưới trạm sạc',
+        tag: 'Mối bận tâm',
+        tagColor: 'yellow',
+        description: 'Người dùng xe cá nhân mong muốn trạm sạc phủ kín các bãi đỗ xe chung cư và trung tâm thương mại.',
+      },
+    ],
+    sampleComments: [
+      {
+        id: 'c1',
+        platform: 'Facebook',
+        channel: 'Cộng đồng Xe điện',
+        time: '19:00 · 18/10',
+        content: '“Đi xe buýt điện êm và sạch hơn hẳn xe buýt cũ, hy vọng có thêm nhiều tuyến mới.”',
+        sentiment: 'positive',
+        sentimentLabel: 'Tích cực',
+      },
+    ],
+    samplePosts: [
+      {
+        id: 'p1',
+        platform: 'Facebook',
+        sourceName: 'Di chuyển bền vững',
+        time: '16:00 · 18/10/2026',
+        title: 'Tổng hợp các tuyến xe buýt điện mới được mở rộng trong tháng 10',
+        excerpt: 'Cập nhật lộ trình chi tiết và tần suất chạy xe buýt điện phục vụ cư dân các quận ngoại thành...',
+        likes: '280',
+        comments: '54',
+        shares: '31',
+      },
+    ],
+  },
+};
 
-// --------------- Topic Stats ---------------
-export const topicStats: TopicStat[] = [
-  {
-    label: 'Bài viết công khai',
-    value: '1,240',
-    change: '+300',
-    changePercent: '+32%',
-    icon: 'post',
-  },
-  {
-    label: 'Bình luận',
-    value: '4,860',
-    change: '+680',
-    changePercent: '+16%',
-    icon: 'comment',
-  },
-  {
-    label: 'Lượt tương tác',
-    value: '18,600',
-    change: '+3,200',
-    changePercent: '+21%',
-    icon: 'interaction',
-  },
-  {
-    label: 'Điểm xu hướng',
-    value: '92/100',
-    change: '+8',
-    changePercent: '+9.5%',
-    icon: 'score',
-  },
-]
-
-// --------------- Auto Summary ---------------
-export const autoSummary: string = `Trong tuần từ 12-18/10/2026, chủ đề "AI trong giáo dục" tiếp tục là chủ đề được thảo luận sôi nổi nhất trên các nền tảng mạng xã hội. Với 1,240 bài viết công khai và hơn 4,860 bình luận, cộng đồng đặc biệt quan tâm đến việc ứng dụng các công cụ AI như ChatGPT, Gemini và các nền tảng học tập thông minh vào quá trình giảng dạy và học tập.
-
-Các cuộc thảo luận chủ yếu xoay quanh ba trục chính: (1) Lợi ích của AI trong việc cá nhân hóa trải nghiệm học tập, giúp học sinh tiếp cận kiến thức phù hợp với năng lực; (2) Lo ngại về tính trung thực học thuật khi sinh viên sử dụng AI để hoàn thành bài tập; và (3) Vai trò mới của giáo viên trong bối cảnh AI ngày càng phổ biến.
-
-Đáng chú ý, 55% ý kiến thể hiện thái độ tích cực về việc tích hợp AI vào giáo dục, trong khi 9% bày tỏ lo ngại sâu sắc về các tác động tiêu cực tiềm ẩn.`
-
-// --------------- Discussion Trend Data (Line Chart) ---------------
-export const discussionTrendData: DiscussionTrendPoint[] = [
-  { date: '12/10', posts: 140 },
-  { date: '13/10', posts: 165 },
-  { date: '14/10', posts: 190 },
-  { date: '15/10', posts: 210 },
-  { date: '16/10', posts: 230 },
-  { date: '17/10', posts: 180 },
-  { date: '18/10', posts: 125 },
-]
-
-// --------------- Sentiment Data ---------------
-export const sentimentData: SentimentData = {
-  positive: 55,
-  neutral: 36,
-  negative: 9,
-  positiveCount: 2670,
-  neutralCount: 1413,
-  negativeCount: 720,
-}
-
-// --------------- Key Insights ---------------
-export const keyInsights: KeyInsight[] = [
-  {
-    title: 'Góc nhìn ứng dụng',
-    description:
-      'Phần lớn cộng đồng đánh giá cao khả năng cá nhân hóa học tập của AI. Các giáo viên chia sẻ kinh nghiệm sử dụng ChatGPT để thiết kế bài giảng, tạo bài tập phù hợp năng lực từng học sinh và hỗ trợ chấm bài tự động.',
-    type: 'application',
-  },
-  {
-    title: 'Mối quan ngại',
-    description:
-      'Một bộ phận đáng kể lo ngại về tính trung thực học thuật khi sinh viên sử dụng AI để viết bài luận và hoàn thành bài tập. Nhiều ý kiến kêu gọi cần có quy định rõ ràng về việc sử dụng AI trong kiểm tra, đánh giá.',
-    type: 'concern',
-  },
-  {
-    title: 'Câu hỏi nổi bật',
-    description:
-      'Câu hỏi được đặt ra nhiều nhất: "Làm thế nào để giáo viên thích nghi với vai trò mới khi AI có thể trả lời hầu hết các câu hỏi kiến thức?" và "Liệu AI có thể thay thế hoàn toàn gia sư truyền thống?"',
-    type: 'question',
-  },
-]
-
-// --------------- Sample Comments ---------------
-export const sampleComments: SampleComment[] = [
-  {
-    author: 'Người dùng ẩn danh',
-    platform: 'facebook',
-    text: 'Mình đã dùng AI để hỗ trợ soạn giáo án và thấy hiệu quả rõ rệt. Thời gian chuẩn bị bài giảng giảm 40%, học sinh cũng hứng thú hơn với các bài tập được cá nhân hóa.',
-    type: 'positive',
-  },
-  {
-    author: 'Người dùng ẩn danh',
-    platform: 'threads',
-    text: 'Cần phải có hướng dẫn cụ thể cho sinh viên về cách sử dụng AI một cách có trách nhiệm. Không nên cấm hoàn toàn mà nên dạy cách dùng đúng.',
-    type: 'neutral',
-  },
-  {
-    author: 'Người dùng ẩn danh',
-    platform: 'reddit',
-    text: 'Lo ngại nhất là khoảng cách số giữa thành thị và nông thôn. Khi AI trở thành công cụ học tập phổ biến, học sinh vùng khó khăn sẽ càng bị tụt lại phía sau.',
-    type: 'negative',
-  },
-]
-
-// --------------- Source Posts ---------------
-export const sourcePosts: SourcePost[] = [
-  {
-    platform: 'facebook',
-    source: 'Giáo dục Việt Nam',
-    title: 'Bộ GD&ĐT khuyến khích ứng dụng AI trong giảng dạy từ năm học 2026-2027',
-    date: '15/10/2026',
-    description:
-      'Bài viết thông báo chính sách mới của Bộ Giáo dục về việc khuyến khích các trường học tích hợp công cụ AI vào quá trình giảng dạy, kèm theo hướng dẫn cụ thể.',
-    interactions: 4200,
-  },
-  {
-    platform: 'threads',
-    source: 'Tech Education VN',
-    title: 'Top 10 công cụ AI miễn phí hỗ trợ giáo viên soạn giáo án',
-    date: '14/10/2026',
-    description:
-      'Bài viết giới thiệu các công cụ AI miễn phí mà giáo viên có thể sử dụng để thiết kế bài giảng, tạo câu hỏi kiểm tra và đánh giá năng lực học sinh.',
-    interactions: 2800,
-  },
-  {
-    platform: 'reddit',
-    source: 'r/GiaoDucVN',
-    title: 'Thảo luận: AI có đang làm giảm tư duy phản biện của sinh viên?',
-    date: '16/10/2026',
-    description:
-      'Thread thảo luận sôi nổi về tác động của việc lạm dụng AI đối với khả năng tư duy độc lập và sáng tạo của sinh viên đại học.',
-    interactions: 1860,
-  },
-]
-
-// --------------- Timeline ---------------
-export const timeline: TimelineEvent[] = [
-  {
-    date: '12/10/2026',
-    title: 'Khởi đầu tuần thảo luận',
-    description:
-      'Bộ GD&ĐT công bố dự thảo hướng dẫn sử dụng AI trong giáo dục, kích hoạt làn sóng thảo luận trên mạng xã hội.',
-    sources: 45,
-  },
-  {
-    date: '15/10/2026',
-    title: 'Đỉnh điểm thảo luận',
-    description:
-      'Bài viết của trang Giáo dục Việt Nam về chính sách mới thu hút hơn 4,200 lượt tương tác, trở thành bài viết viral trong tuần.',
-    sources: 120,
-  },
-  {
-    date: '17/10/2026',
-    title: 'Phản hồi từ chuyên gia',
-    description:
-      'Nhiều chuyên gia giáo dục và công nghệ đưa ra ý kiến phản hồi, tạo thêm các cuộc thảo luận chuyên sâu về ứng dụng AI.',
-    sources: 85,
-  },
-]
+export const getTopicDetail = (id?: string | null): TopicDetailData => {
+  if (id && TOPICS_DATABASE[id]) {
+    return TOPICS_DATABASE[id];
+  }
+  // Mặc định trả về topic-1 nếu không tìm thấy
+  return TOPICS_DATABASE['topic-1'];
+};

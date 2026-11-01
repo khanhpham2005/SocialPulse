@@ -1,35 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { User } from '../data/users';
 import { DEFAULT_USERS, STORAGE_KEYS } from '../data/users';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
-
-export interface RegisterCredentials {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthResult {
-  success: boolean;
-  message?: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (credentials: LoginCredentials) => Promise<AuthResult>;
-  register: (credentials: RegisterCredentials) => Promise<AuthResult>;
-  logout: () => void;
-  rememberedEmail: string;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { AuthContext } from './authContextDef';
+import type { LoginCredentials, RegisterCredentials, AuthResult } from './types';
 
 // Helper lấy danh sách tài khoản đã đăng ký từ localStorage
 const getStoredUsers = (): User[] => {
@@ -45,35 +18,32 @@ const getStoredUsers = (): User[] => {
 // Helper lấy toàn bộ danh sách tài khoản (kết hợp mặc định + đã lưu)
 const getAllUsers = (): User[] => {
   const customUsers = getStoredUsers();
-  // Loại trừ trùng email nếu có
   const customEmails = new Set(customUsers.map((u) => u.email.toLowerCase()));
   const defaults = DEFAULT_USERS.filter((u) => !customEmails.has(u.email.toLowerCase()));
   return [...defaults, ...customUsers];
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [rememberedEmail, setRememberedEmail] = useState('');
-
-  // Khôi phục phiên làm việc và email ghi nhớ khi tải trang
-  useEffect(() => {
+  // Khởi tạo state lười (lazy) ngay lần render đầu tiên, tránh cascading render trong useEffect
+  const [user, setUser] = useState<User | null>(() => {
     try {
       const storedUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-
-      const storedEmail = localStorage.getItem(STORAGE_KEYS.REMEMBER_EMAIL);
-      if (storedEmail) {
-        setRememberedEmail(storedEmail);
-      }
+      return storedUser ? (JSON.parse(storedUser) as User) : null;
     } catch {
       localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    } finally {
-      setIsLoading(false);
+      return null;
     }
-  }, []);
+  });
+
+  const [rememberedEmail, setRememberedEmail] = useState<string>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.REMEMBER_EMAIL) || '';
+    } catch {
+      return '';
+    }
+  });
+
+  const [isLoading] = useState<boolean>(false);
 
   const login = async ({ email, password, rememberMe = false }: LoginCredentials): Promise<AuthResult> => {
     const cleanEmail = email.trim().toLowerCase();
@@ -183,12 +153,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
